@@ -1946,51 +1946,68 @@
         </div>
       </section>
       <details class="method">
-        <summary>Behind the feeling: how Sway works</summary>
+        <summary>How to use Sway and read your map</summary>
         <p>
-          Sway learns a hidden preference score for each item. Quick picks use a
-          Bayesian Bradley–Terry model. Fine-tuned judgments use a normalized
-          continuous Bernoulli likelihood, so a tie, a slight preference, and an
-          absolute preference each carry different evidence. Gaussian priors
-          anchor even disconnected groups. After each judgment, Sway refits the
-          entire history with a full-covariance Laplace approximation. The same
-          evidence gives the same result regardless of the order in which you
-          entered it.
+          <strong>Make one small choice.</strong> Quick pick records a preference
+          as soon as you choose a card. Fine tune lets you move toward an item
+          and then select Record preference. Clicking a card in Fine tune sets
+          the strongest preview; it still needs submission. Equal records a
+          tie, Skip adds no evidence, and Undo removes your latest recorded
+          choice. Check Last recorded to see what was accepted.
         </p>
         <p>
-          The expected percentile is calculated from Gaussian pairwise
-          probabilities, avoiding sampling noise in the displayed score. We also
-          draw 1,000 joint samples for the approximate 95% interval, using the
-          same random sequence throughout your session to reduce visual jitter.
-          These approximate model intervals depend on the model and your
-          choices; they aren't guarantees. The model assumes a stable,
-          transitive preference scale and conditionally independent judgments.
-          Repeated answers from one person can be correlated, so intervals may
-          be too narrow if those assumptions fail. The continuous scale is a
-          modeling choice, not a calibrated psychological measurement. An item's
-          position is relative to this list, not a universal quality score.
-          Conflicting preferences are normal, and a single order cannot capture
-          every nuance.
+          <strong>Read position and uncertainty together.</strong> Higher
+          percentiles mean a higher expected position within your list. Five
+          items in an exact order would have positions 0, 25, 50, 75, and 100;
+          Sway averages over plausible orders. The dot shows expected position,
+          and the band is an approximate 95% model interval. Wide bands leave
+          room for a different order. They can stay wide around ties, even after
+          many choices. A score is a relative position estimate, not a confidence
+          percentage or a quality rating.
         </p>
         <p>
-          After introducing your items, Sway usually chooses the pair with the
-          greatest estimated information gain for your input mode. Ten percent
-          of pair selections explore less-compared items or connections. There
-          is no fixed number of choices that guarantees a settled order.
+          <strong>Explore at your own pace.</strong> Coverage counts items that
+          appeared in a recorded choice; it does not measure certainty.
+          Uncompared items show a dash. Use Show all items to expand a compact
+          map, and select See my order whenever the current perspective is
+          useful. Keep refining resumes comparisons. There is no required
+          finish point; a session can hold up to 10,000 recorded choices.
+        </p>
+        <p>
+          <strong>Keep a recovery copy.</strong> Sway attempts to autosave one
+          session in this browser. Save a JSON backup to restore your progress
+          elsewhere; CSV exports are ranking summaries and cannot restore a
+          session. If storage fails or another tab changes the saved session,
+          download a backup before reloading or closing. Reloading adopts the
+          saved version and discards this tab's unsaved work. Restore replaces
+          the current session after confirmation. The app makes no automatic
+          network requests; the research link below opens an external website.
+        </p>
+        <p>
+          <strong>Use the keyboard.</strong> Tab to a comparison button to use
+          left/right arrows for Quick pick, E for equal, S to skip, and Z to undo.
+          On the Fine tune slider, use its native arrow keys to adjust your
+          preview, then Enter to submit it. Comparison shortcuts apply only
+          inside the comparison stage. Reduced-motion preferences are respected.
+        </p>
+        <p>
+          <strong>About the estimates.</strong> Sway uses a Bayesian
+          Bradley–Terry model for quick picks and a normalized continuous
+          Bernoulli likelihood for strength judgments. It refits the full
+          history after each choice, then uses a Gaussian approximation for
+          utilities, analytic expected percentiles, and 1,000 joint samples for
+          rank intervals. The model assumes stable, transitive preferences and
+          conditionally independent judgments. Its response scale and intervals
+          have not been calibrated with human participants. After connecting
+          your list, pairing usually seeks information and explores less-compared
+          options with probability 0.10. No comparison count guarantees a
+          settled order.
           <a
             href="https://papers.neurips.cc/paper_files/paper/2019/hash/f82798ec8909d23e55679ee26bb26437-Abstract.html"
             target="_blank"
             rel="noopener noreferrer"
             >About the continuous likelihood ↗</a
           >
-        </p>
-        <p>
-          All calculations and data stay on this device. No assets, analytics,
-          or account required. Local-file browser storage can be unavailable or
-          cleared; download a JSON backup to keep your progress. Sessions
-          support up to 10,000 judgments. Model defaults: standard normal
-          priors, precision <code>γ = 1</code>, full covariance, and
-          deterministic posterior sampling.
         </p>
       </details>
       <input

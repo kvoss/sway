@@ -1,45 +1,45 @@
 # Sway — Find your order
 
-Open `index.html` in a browser. It is the complete deliverable: styles, application, and numerical worker are embedded, and no network or build step is required. Supporting documents and tests are development resources.
+Sway helps you discover your preferences by choosing between two things at a time. Bring a list of ideas, places, priorities, or other possibilities; watch your preference map take shape with each choice.
 
-## Use
+**[Open Sway](index.html)** in your browser. The complete app is one HTML file. It works offline and needs no account, installation, or build step.
 
-Paste 2–50 unique names, one per line. Quick pick records a binary preference. Fine tune previews a continuous preference, then records it on explicit submission; Equal records an explicit tie. Skip supplies no evidence. Undo removes the latest judgment.
+## Your first ranking
 
-The map shows expected percentile positions within the whole list, with approximate 95% credible intervals. Uncompared items are listed separately without a numeric estimate. Equal displayed scores share an order number in the interface and CSV. Scores are relative positions, not quality ratings or win probabilities.
+1. Enter **2–50 unique names**, one per line, or select **Try an example**.
+2. Select **Find my order**.
+3. In **Quick pick**, choose the card you prefer. To express strength, switch to **Fine tune**, move the slider, and select **Record preference**.
+4. Select **See my order** whenever you want to pause. **Keep refining** returns to comparisons.
+5. Download a **JSON backup** before closing if you want a portable copy of your progress.
 
-The browser saves one session locally. JSON backups preserve all judgments and settings; CSV exports summarize the current map. Autosave uses an exclusive Web Lock where available and checks for changes from other tabs. A conflict suspends autosave in this tab to preserve both versions. Download a backup or reload to adopt the saved version. Browsers without Web Locks retain change detection but cannot guarantee atomic cross-tab writes.
+Use **Equal preference** when both options appeal equally, **Skip** when you cannot judge, and **Undo** to remove your latest recorded choice. Skipping supplies no preference evidence.
 
-## Statistical model
+## Reading your map
 
-- Standard normal utility priors; fixed link precision of 1.
-- Binary Bradley–Terry likelihood and a normalized continuous Bernoulli likelihood for strength judgments.
-- Full-history MAP refitting after every choice, using pair sufficient statistics, damped Newton optimization, and inverse-Hessian Gaussian covariance. This removes the earlier sequential approximation's chronology bias.
-- Expected percentiles calculated from Gaussian pairwise probabilities. Approximate credible intervals use 1,000 deterministic, antithetic joint samples with a fixed session seed.
-- Connected graph bootstrap, followed by mode-specific numerical mutual information with 10% exploration. Disconnected imported histories are bridged explicitly.
+Higher scores indicate a higher expected position **within your own list**. In an exact order of five items, the positions would be 0, 25, 50, 75, and 100. Sway averages over plausible orders, so scores can fall between those values.
 
-The Gaussian posterior remains an approximation. The model assumes stable, transitive preferences and conditionally independent judgments. A user's repeated choices can violate these assumptions; interval coverage and the continuous response scale have not been calibrated on human participants. The synthetic coverage check is a regression smoke test, not evidence of psychological validity. See [REVIEW.md](REVIEW.md) for findings and limitations.
+The dot shows the expected position. The band shows an **approximate 95% model interval**: a wide band means the order is still uncertain. Bands can stay wide around equally preferred items, even after many comparisons. There is no required number of choices or guaranteed finish point.
 
-Version 1 backups remain compatible. Their scores are recomputed from the original judgments using the corrected inference engine.
+Uncompared items appear below compared items with a dash. Select **Show all items** when your map is showing only its first five entries.
 
-## Verification
+## Keep your progress
 
-Run the dependency-free numerical and validation tests from this directory:
+Sway attempts to save one active session in this browser. Look for **Saved on this device**. Browser storage can be unavailable or cleared; a JSON backup is your portable recovery copy.
 
-```sh
-node tests/model.test.cjs
-```
+| File | Use it for |
+| --- | --- |
+| `sway-backup.json` | Restore names, judgments, current pair, and settings in Sway. |
+| `sway-order.csv` | View or share the current ranking in a spreadsheet. It cannot restore a session. |
 
-Optional development tools for browser and accessibility tests:
+If another tab changes the saved session, Sway keeps this tab's work in memory and pauses its autosave. **Download a backup before reloading or closing that tab.** Reloading adopts the saved version and discards any unsaved in-memory changes.
 
-```sh
-npm install --no-save --package-lock=false playwright@1.57.0 @axe-core/playwright@4.10.2
-npx playwright install chromium firefox
-node tests/browser.cjs
-SWAY_BROWSER=firefox node tests/browser.cjs
-node tests/accessibility.cjs
-```
+The app makes no automatic network requests. Its optional research link opens an external website when selected. Backup and CSV files contain your entered names; JSON also contains your judgments.
 
-The harness also accepts `SWAY_PLAYWRIGHT_MODULE`, `SWAY_AXE_MODULE`, `SWAY_CHROMIUM_PATH`, and `SWAY_FIREFOX_PATH` for existing tool installations. Browser tests use isolated profiles, save screenshots to a temporary directory, and leave user sessions untouched.
+## Find the right guide
 
-Keep the deliverable self-contained. Apply changes using native editing tools. The three embedded sections are styling/markup, pure statistical worker functions, and session/rendering logic. Regression tests extract the actual embedded code rather than maintaining a second implementation.
+- **[User guide](docs/USER_GUIDE.md):** controls, examples, keyboard use, backups, and troubleshooting.
+- **[Model explained](docs/MODEL.md):** likelihoods, percentile calculations, pairing, assumptions, and limits.
+- **[Contributor guide](CONTRIBUTING.md):** source layout, reproducible checks, file formats, and change review.
+- **[Review record](REVIEW.md):** findings, corrections, self-assessment scores, and the scope of recorded verification.
+
+Recorded browser checks cover Chromium and Firefox on desktop Linux, including mobile-sized viewports. Safari, phone hardware, and manual screen-reader use remain unverified. The preference model has not been calibrated with human participants.
